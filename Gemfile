@@ -7,10 +7,9 @@ gem 'sinatra-contrib'
 
 gem 'slim'
 gem 'sass'
+gem 'redcarpet'
 gem 'compass'
 gem 'compass-flexbox'
-
-# gem 'krypt'
 
 group :test do
   gem "cucumber"

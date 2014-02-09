@@ -1,0 +1,36 @@
+doctype
+html
+  head
+    link href="//netdna.bootstrapcdn.com/bootswatch/3.1.0/cerulean/bootstrap.min.css" rel="stylesheet"
+    link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet"
+    link href="/css/style.css" rel="stylesheet"
+  body.container-fluid
+    nav.navbar.navbar-default.navbar-fixed-top role="navigation"
+      .container-fluid
+        ul.nav.navbar-nav
+          li.dropdown
+            a.dropdown-toggle data-toggle="dropdown" href="#"
+              | Woods Orthodontics 
+              b.caret
+            ul.dropdown-menu
+              li
+                a href="#" Maps
+              li
+                a href="#" Biography
+              li
+                a href="#" Treatments
+              li.divider
+              li
+                a href="#" Admin
+        ul.nav.navbar-nav.navbar-right
+          li
+            a href="#" Contact Us
+    .jumbotron
+      h1 Enjoy a Better Smile!
+      p Come to Woods Orthodontics for a free consultation!
+      p
+        a.btn.btn-success.btn-lg role="button" Contact Us
+    .container-fluid
+      == yield
+  script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+  script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"

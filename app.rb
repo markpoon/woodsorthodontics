@@ -1,4 +1,5 @@
 require "sinatra/base"
+require "slim"
 
 if settings.development?
   require "sinatra/reloader"
@@ -20,7 +21,16 @@ class Application < Sinatra::Base
     Bundler.require(:production)
   end
 
+# select names that end with .md from the views folder and strip them of their
+# endings, turn them each into symbols and pass them through the markdown engine
+# then join them into a single page view using the slim layout
   get '/' do
-    slim :index
+    slim Dir.entries("./views").select{|name| name.match /.md\z/}
+    .map{|name| name.sub ".md", ""}.map(&:to_sym)
+    .map{|name| markdown name}.join
+  end
+  get '/css/:name.css' do
+    content_type 'text/css', charset: 'utf-8'
+    scss(:"/sass/#{params[:name]}")
   end
 end
