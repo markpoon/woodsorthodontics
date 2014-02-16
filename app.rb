@@ -29,6 +29,7 @@ class Application < Sinatra::Base
     .map{|name| name.sub ".md", ""}.map(&:to_sym)
     .map{|name| markdown name}.join
   end
+
   get '/css/:name.css' do
     content_type 'text/css', charset: 'utf-8'
     scss(:"/sass/#{params[:name]}")
