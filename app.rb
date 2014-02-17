@@ -6,8 +6,27 @@ if settings.development?
   require 'benchmark'
   require 'pry'
 end
+module Sinatra
+  use Rack::Auth::Basic, "Restricted Area" do |username, password|
+    username == 'admin' and password == 'password'
+  end
+
+  module LoginHelper
+    def protected!
+      return if authorized?
+      headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+      halt 401, "Access Denied. Access To This Resource Is Unauthorized.\n"
+    end
+    def authorized?
+      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+      @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['Margit Woods Login', 'a slightly tipsy wombat']
+    end
+  end 
+  helpers LoginHelper
+end
 
 class Application < Sinatra::Base
+  helpers Sinatra::LoginHelper
   configure :development do
     register Sinatra::Reloader
     include Benchmark
@@ -21,14 +40,36 @@ class Application < Sinatra::Base
     Bundler.require(:production)
   end
 
-# select names that end with .md from the views folder and strip them of their
-# endings, turn them each into symbols and pass them through the markdown engine
-# then join them into a single page view using the slim layout
   get '/' do
-    slim Dir.entries("./views").select{|name| name.match /.md\z/}
-    .map{|name| name.sub ".md", ""}.map(&:to_sym)
-    .map{|name| markdown name}.join
+    slim :index
   end
+
+  get '/body' do
+    markdown :body
+  end
+
+  post '/body' do
+    protected!
+    #
+  end
+
+  get '/notification' do
+    markdown :notification
+  end
+
+  post '/notification' do
+    #
+  end
+
+  # select names that end with .md from the views folder and strip them of their
+  # endings, each into symbols and pass them through the markdown engine
+  # then join them into a single page view using the slim layout
+
+  # get '/' do
+  #   slim Dir.entries("./views").select{|name| name.match /.md\z/}
+  #   .map{|name| name.sub ".md", ""}.map(&:to_sym)
+  #   .map{|name| markdown name}.join
+  # end
 
   get '/css/:name.css' do
     content_type 'text/css', charset: 'utf-8'
