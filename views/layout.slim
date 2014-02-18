@@ -11,21 +11,31 @@ body.container-fluid
       ul.nav.navbar-nav
         li.dropdown
           a.dropdown-toggle data-toggle="dropdown" href="#"
+            i.fa.fa-chevron-down>
             | Woods Orthodontics 
-            b.caret
           ul.dropdown-menu
             li
-              a href="#" Locations
+              a href="#locations"
+                i.fa.fa-map-marker>
+                |Locations
             li
-              a href="#" Biography
+              a href="#biography" 
+                i.fa.fa-file-o>
+                |Biography
             li
-              a href="#" Treatments
+              a href="#treatments" 
+                i.fa.fa-flask>
+                |Treatments
             li.divider
             li
-              a href="#" Edit
+              a href="#"
+                i.fa.fa-pencil>
+                | Edit
       ul.nav.navbar-nav.navbar-right
         li
-          a href="#" Contact Us
+          a href="#" 
+            i.fa.fa-envelope-o>
+            | Contact Us
   .container-fluid
     == yield
 script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
