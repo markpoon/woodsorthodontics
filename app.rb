@@ -40,25 +40,28 @@ class Application < Sinatra::Base
     Bundler.require(:production)
   end
 
+  get '/scripts/cms.js' do
+    coffee :cms
+  end
+
   get '/' do
     slim :index
   end
 
-  get '/body' do
-    markdown :body
+  get '/md/:filename' do
+    markdown params[:filename].intern
   end
 
-  post '/body' do
+  get '/markdown/:filename' do
+    Rack::Utils.escape_html File.read("./views/" + params[:filename] + ".md")
+  end
+
+  post '/markdown/:filename' do
     protected!
-    #
-  end
-
-  get '/notification' do
-    markdown :notification
-  end
-
-  post '/notification' do
-    #
+    binding.pry
+    File.open("./views/" + params[:filename]) do |file|
+      file = params[:content]
+    end
   end
 
   # select names that end with .md from the views folder and strip them of their

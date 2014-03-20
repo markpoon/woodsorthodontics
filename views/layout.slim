@@ -28,15 +28,16 @@ body.container-fluid
                 |Treatments
             li.divider
             li
-              a href="#"
+              a onclick="toggle_edit_ui()" href="javascript:void(0)"
                 i.fa.fa-pencil>
                 | Edit
       ul.nav.navbar-nav.navbar-right
         li
-          a href="#" 
+          a href="#"
             i.fa.fa-envelope-o>
             | Contact Us
   .container-fluid
     == yield
 script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
 script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"
+script src="/scripts/cms.js"

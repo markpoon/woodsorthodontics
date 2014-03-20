@@ -8,8 +8,7 @@ gem 'sinatra-contrib'
 gem 'slim'
 gem 'sass'
 gem 'redcarpet'
-gem 'compass'
-gem 'compass-flexbox'
+gem 'coffee-script'
 
 group :test do
   gem "cucumber"
