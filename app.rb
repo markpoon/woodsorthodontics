@@ -6,22 +6,40 @@ if settings.development?
   require 'benchmark'
   require 'pry'
 end
-module Sinatra
-  use Rack::Auth::Basic, "Restricted Area" do |username, password|
-    username == 'admin' and password == 'password'
-  end
 
+enable :sessions
+
+module Sinatra
   module LoginHelper
+
     def protected!
       return if authorized?
       headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
       halt 401, "Access Denied. Access To This Resource Is Unauthorized.\n"
     end
+
     def authorized?
       @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-      @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['Margit Woods Login', 'a slightly tipsy wombat']
+      cred = ['margit', 'tipsy wombats']
+
+      if session[:login] and session[:password]
+        if cred == [session[:login], session[:password]]
+          true
+        else
+          false
+        end
+      elsif @auth.provided? and @auth.basic? and @auth.credentials
+        if @auth.credentials == cred
+          session[:login], session[:password] = @auth.credentials
+          true
+        else
+          false
+        end
+      else
+        false
+      end
     end
-  end 
+  end
   helpers LoginHelper
 end
 
@@ -48,20 +66,30 @@ class Application < Sinatra::Base
     slim :index
   end
 
+  get '/login' do
+    authorized?
+  end
+
+  get '/logout' do
+    session = {}
+  end
+
   get '/md/:filename' do
     markdown params[:filename].intern
   end
 
   get '/markdown/:filename' do
+    protected!
     Rack::Utils.escape_html File.read("./views/" + params[:filename] + ".md")
   end
 
   post '/markdown/:filename' do
     protected!
-    binding.pry
-    File.open("./views/" + params[:filename]) do |file|
-      file = params[:content]
+    filename = "./views/" + params[:filename] + ".md"
+    File.open(filename,'w') do |file|
+      file.write params[:markdown]
     end
+    markdown params[:filename].intern
   end
 
   # select names that end with .md from the views folder and strip them of their
